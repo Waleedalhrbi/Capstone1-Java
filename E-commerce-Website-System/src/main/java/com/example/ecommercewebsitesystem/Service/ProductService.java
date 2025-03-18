@@ -89,7 +89,7 @@ public class ProductService {
         ArrayList<Product> productsWithPrice = new ArrayList<>();
 
         for (Product product : products) {
-            if (product.getPrice() >= maxPrice && product.getPrice() <= minPrice) {
+          if (product.getPrice() >= minPrice && product.getPrice() <= maxPrice) {
                 productsWithPrice.add(product);
             }
         }
