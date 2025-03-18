@@ -76,26 +76,28 @@ public class UserService {
     public int buyProduct(String userID, String productID, String merchantID) {
         for (User userB : users) {
             if (userB.getID().equalsIgnoreCase(userID)) {
-                for (Merchant merchant : merchantService.getMerchants()){
+                for (Merchant merchant : merchantService.getMerchants()) {
                     if (merchant.getID().equalsIgnoreCase(merchantID)) {
-                        for (Product product : productService.getProducts()){
-                            for (MerchantStock merchantStock : merchantStockService.getMerchantStockList()){
-                                if (merchantStock.getProductID().equalsIgnoreCase(product.getID())){
-                                        if (product.getID().equalsIgnoreCase(productID)){
-                                            if (merchantStock.getStock() > 0) {
-                                                if (userB.getBalance() >= product.getPrice()) {
-                                                    userB.setBalance(userB.getBalance() - product.getPrice());
-                                                    merchantStock.setStock(merchantStock.getStock() - 1);
-                                                    addToOrderHistory(userB, product);
-                                                    product.setStatus("Purchased");
-                                                    return 1;
-                                                }
-                                                return 2;
+                        for (Product product : productService.getProducts()) {
+                            if (product.getID().equalsIgnoreCase(productID)) {
+                                for (MerchantStock merchantStock : merchantStockService.getMerchantStockList()) {
+                                    if (merchantStock.getProductID().equalsIgnoreCase(productID) &&
+                                            merchantStock.getMerchantId().equalsIgnoreCase(merchantID)) { 
+
+                                        if (merchantStock.getStock() > 0) {
+                                            if (userB.getBalance() >= product.getPrice()) {
+                                                userB.setBalance(userB.getBalance() - product.getPrice());
+                                                merchantStock.setStock(merchantStock.getStock() - 1);
+                                                addToOrderHistory(userB, product);
+                                                product.setStatus("Purchased");
+                                                return 1;
                                             }
-                                            return 3;
+                                            return 2;
                                         }
-                                    return 4;
+                                        return 3;
+                                    }
                                 }
+                                return 4;
                             }
                         }
                     }
